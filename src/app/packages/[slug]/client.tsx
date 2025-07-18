@@ -154,13 +154,14 @@ export function PackageDetailsClient({
   const { toast } = useToast();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { user } = useAuth();
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
   const [lightboxOpen, setLightboxOpen] = React.useState(false);
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
   const [travelers, setTravelers] = React.useState(2);
   const [selectedDate, setSelectedDate] = React.useState("");
 
   const handleWishlistToggle = () => {
+    const wasWishlisted = isInWishlist(pkg.id);
     const success = toggleWishlist(pkg.id);
     if (!success) {
       toast({
@@ -170,10 +171,9 @@ export function PackageDetailsClient({
         variant: "default",
       });
     } else {
-      const isNowWishlisted = isInWishlist(pkg.id);
       toast({
-        title: isNowWishlisted ? "Added to Wishlist" : "Removed from Wishlist",
-        description: `"${pkg.title}" has been ${isNowWishlisted ? "added to" : "removed from"} your wishlist.`,
+        title: wasWishlisted ? "Removed from Wishlist" : "Added to Wishlist",
+        description: `"${pkg.title}" has been ${wasWishlisted ? "removed from" : "added to"} your wishlist.`,
       });
     }
   };
@@ -676,17 +676,26 @@ export function PackageDetailsClient({
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button
-                  size="lg"
-                  className="flex-1 text-lg"
-                  onClick={handleAddToCart}
-                >
-                  <ShieldCheck className="mr-2 h-5 w-5" />
-                  Add to Cart - ₹
-                  {(
-                    parseInt(pkg.price.replace(/,/g, "")) * travelers
-                  ).toLocaleString()}
-                </Button>
+                {isInCart(pkg.id) ? (
+                  <Link href="/cart" className="flex-1">
+                    <Button size="lg" className="w-full text-lg" variant="secondary">
+                      <ShieldCheck className="mr-2 h-5 w-5" />
+                      Go to Cart
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    size="lg"
+                    className="flex-1 text-lg"
+                    onClick={handleAddToCart}
+                  >
+                    <ShieldCheck className="mr-2 h-5 w-5" />
+                    Add to Cart - ₹
+                    {(
+                      parseInt(pkg.price.replace(/,/g, "")) * travelers
+                    ).toLocaleString()}
+                  </Button>
+                )}
                 <Button
                   variant="outline"
                   size="lg"

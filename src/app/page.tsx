@@ -84,6 +84,8 @@ type Package = (typeof allPackages)[0];
 const AppHeader = () => {
   const { getTotalItems } = useCart();
   const cartItemCount = getTotalItems();
+  const { wishlistItems } = useWishlist();
+  const wishlistCount = wishlistItems.length;
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
@@ -136,6 +138,18 @@ const AppHeader = () => {
                 </span>
               )}
               <span className="sr-only">Cart</span>
+            </Button>
+          </Link>
+
+          <Link href="/shortlist" passHref>
+            <Button variant="ghost" size="icon" className="relative">
+              <Heart className="h-5 w-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
+              <span className="sr-only">Wishlist</span>
             </Button>
           </Link>
 
@@ -316,7 +330,7 @@ export default function Home() {
                         />
                         <div className="flex-1">
                           <h4 className="font-medium text-sm">{pkg.title}</h4>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-foreground/70">
                             {pkg.destination} • {pkg.duration}
                           </p>
                         </div>
@@ -393,7 +407,7 @@ export default function Home() {
                             "text-sm font-medium transition-colors",
                             activeDestination === dest.name
                               ? "text-primary"
-                              : "text-muted-foreground",
+                              : "text-foreground/80",
                           )}
                         >
                           {dest.name}

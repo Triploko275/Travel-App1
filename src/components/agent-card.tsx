@@ -19,11 +19,11 @@ export const AgentCard = ({ agent }: { agent: Agent }) => {
                         <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <h3 className="font-headline text-lg font-bold">{agent.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{agent.specialty}</p>
+                    <p className="text-sm text-foreground/80 mt-1">{agent.specialty}</p>
                     <div className="flex items-center gap-1 mt-2">
                         <Star className="h-5 w-5 text-accent fill-current" />
                         <span className="font-bold">{agent.rating}</span>
-                        <span className="text-sm text-muted-foreground ml-1">({agent.reviews} reviews)</span>
+                        <span className="text-sm text-foreground/70 ml-1">({agent.reviews} reviews)</span>
                     </div>
                 </CardContent>
             </Card>

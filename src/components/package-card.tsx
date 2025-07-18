@@ -22,6 +22,7 @@ export const PackageCard = ({ pkg }: { pkg: Package }) => {
   const { toast } = useToast();
 
   const handleWishlistToggle = () => {
+    const wasWishlisted = isInWishlist(pkg.id);
     const success = toggleWishlist(pkg.id);
     if (!success) {
       toast({
@@ -31,10 +32,9 @@ export const PackageCard = ({ pkg }: { pkg: Package }) => {
         variant: "default",
       });
     } else {
-      const isNowWishlisted = isInWishlist(pkg.id);
       toast({
-        title: isNowWishlisted ? "Added to Wishlist" : "Removed from Wishlist",
-        description: `"${pkg.title}" has been ${isNowWishlisted ? "added to" : "removed from"} your wishlist.`,
+        title: wasWishlisted ? "Removed from Wishlist" : "Added to Wishlist",
+        description: `"${pkg.title}" has been ${wasWishlisted ? "removed from" : "added to"} your wishlist.`,
       });
     }
   };
@@ -56,13 +56,14 @@ export const PackageCard = ({ pkg }: { pkg: Package }) => {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-2 right-2 rounded-full bg-background/70 hover:bg-background"
+            className="absolute top-2 right-2 rounded-full bg-background/90 hover:bg-background shadow-lg border border-primary/30"
             onClick={handleWishlistToggle}
+            style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}
           >
             <Heart
-              className={`h-5 w-5 ${
+              className={`h-6 w-6 transition-colors duration-200 ${
                 isInWishlist(pkg.id)
-                  ? "text-primary fill-current"
+                  ? "text-primary fill-current drop-shadow"
                   : "text-foreground"
               }`}
             />
